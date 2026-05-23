@@ -34,5 +34,7 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: npm ci
-      - name: Stylize
+      - name: Check Stylization
         run: npm run format:check
+      - name: Lint
+        run: npm run lint
