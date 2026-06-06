@@ -9,6 +9,8 @@ jobs:
     permissions:
       contents: 'read'
       id-token: 'write'
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
     steps:
       - name: Check out code 
@@ -33,5 +35,8 @@ jobs:
         run: 'gcloud info'
       - name: Build and push Docker image
         run: gcloud builds submit --tag us-central1-docker.pkg.dev/arctic-depth-498223-p2/notely-ar-repo/notely:latest .
+      
+      - name: Migrate
+        run: npm run db:migrate
       - name: Deploy to Cloud Run
         run: gcloud run deploy notely --image us-central1-docker.pkg.dev/arctic-depth-498223-p2/notely-ar-repo/notely:latest --region us-central1 --allow-unauthenticated --project arctic-depth-498223-p2 --max-instances=4
